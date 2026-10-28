@@ -1,0 +1,52 @@
+{
+  "manifest_version": 3,
+  "name": "PixelMeasure Pro - Screen Ruler & Distance Inspector",
+  "short_name": "PixelMeasure",
+  "version": "1.0.0",
+  "description": "Pixel-perfect screen ruler, coordinate finder, element dimension inspector, and distance measurement tool for web pages.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    },
+    "default_title": "PixelMeasure Pro (Alt+M)"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "commands": {
+    "toggle-ruler": {
+      "suggested_key": {
+        "default": "Alt+M",
+        "mac": "Alt+M"
+      },
+      "description": "Toggle Pixel Ruler on/off"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "icons/*",
+        "content/overlay.css"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

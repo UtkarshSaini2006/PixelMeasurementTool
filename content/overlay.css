@@ -1,0 +1,519 @@
+/* PixelMeasure - High-Visibility & Clean Overlay Stylesheet */
+
+:host {
+  all: initial;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.4;
+  color: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+/* Master Overlay */
+.pm-overlay-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2147483647;
+  pointer-events: auto;
+  cursor: crosshair;
+  overflow: hidden;
+  contain: strict;
+}
+
+.pm-overlay-container.mode-element {
+  cursor: default;
+}
+
+/* Corner Intersection */
+.pm-ruler-corner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  background: #101116;
+  border-right: 1px solid #2e323b;
+  border-bottom: 1px solid #2e323b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: #cbd5e1;
+  z-index: 15;
+  pointer-events: none;
+  letter-spacing: -0.2px;
+}
+
+/* Edge Rulers */
+.pm-ruler-edge-h {
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 0;
+  height: 24px;
+  background: #101116;
+  border-bottom: 1px solid #2e323b;
+  pointer-events: none;
+  z-index: 12;
+}
+
+.pm-ruler-edge-v {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  bottom: 0;
+  width: 24px;
+  background: #101116;
+  border-right: 1px solid #2e323b;
+  pointer-events: none;
+  z-index: 12;
+}
+
+.pm-ruler-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Ruler Indicators - GPU accelerated translation */
+.pm-ruler-indicator-h {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background-color: #38bdf8;
+  pointer-events: none;
+  z-index: 13;
+  will-change: transform;
+}
+
+.pm-ruler-indicator-v {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #38bdf8;
+  pointer-events: none;
+  z-index: 13;
+  will-change: transform;
+}
+
+/* Hairline Crosshairs - GPU accelerated translation */
+.pm-crosshair-h,
+.pm-crosshair-v {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  background-color: rgba(255, 255, 255, 0.16);
+  z-index: 10;
+  will-change: transform;
+}
+
+.pm-crosshair-h {
+  right: 0;
+  height: 1px;
+}
+
+.pm-crosshair-v {
+  bottom: 0;
+  width: 1px;
+}
+
+/* Cursor Coordinates Badge */
+.pm-cursor-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 25;
+  background: #101116;
+  border: 1px solid #3b404d;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  color: #e2e8f0;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.pm-cursor-badge .coord-val {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.pm-cursor-badge .coord-delta {
+  color: #38bdf8;
+  font-weight: 600;
+  font-size: 12.5px;
+  border-left: 1px solid #333842;
+  padding-left: 7px;
+}
+
+/* Origin Pin Marker */
+.pm-origin-pin {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: -7px;
+  margin-left: -7px;
+  pointer-events: none;
+  z-index: 15;
+  width: 14px;
+  height: 14px;
+  will-change: transform;
+}
+
+.pm-origin-pin::before,
+.pm-origin-pin::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.pm-origin-pin::before {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+}
+
+.pm-origin-pin::after {
+  width: 3px;
+  height: 3px;
+  background: #ffffff;
+}
+
+/* SVG Layer */
+.pm-svg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 14;
+}
+
+/* Measurement Box (Figma Clean Minimalist Style) */
+.pm-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1.5px solid #0ea5e9;
+  background-color: rgba(14, 165, 233, 0.05);
+  pointer-events: auto;
+  cursor: move;
+  z-index: 16;
+  will-change: transform, width, height;
+}
+
+/* 4 Corner Handles (Corners are all you need for 2D resize) */
+.pm-handle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #ffffff;
+  border: 1.5px solid #0284c7;
+  border-radius: 2px;
+  z-index: 20;
+}
+
+.pm-handle.tl { top: -4px; left: -4px; cursor: nwse-resize; }
+.pm-handle.tr { top: -4px; right: -4px; cursor: nesw-resize; }
+.pm-handle.br { bottom: -4px; right: -4px; cursor: nwse-resize; }
+.pm-handle.bl { bottom: -4px; left: -4px; cursor: nesw-resize; }
+
+/* Single Clean Floating Dimension Badge */
+.pm-dimension-pill {
+  position: absolute;
+  background: #101116;
+  border: 1px solid #3b404d;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  padding: 4px 11px;
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 18;
+  letter-spacing: 0.2px;
+}
+
+.pm-dimension-pill .unit {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+.pm-dimension-pill.pill-top {
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.pm-dimension-pill.pill-bottom {
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* 2-Point Line Badge */
+.pm-line-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #101116;
+  border: 1px solid #3b404d;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  border-radius: 6px;
+  padding: 4px 11px;
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  will-change: transform;
+}
+
+.pm-line-badge .sub-stats {
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Element Snap Highlight */
+.pm-element-highlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 1.5px dashed #10b981;
+  background: rgba(16, 185, 129, 0.06);
+  pointer-events: none;
+  z-index: 15;
+  will-change: transform, width, height;
+}
+
+.pm-element-tag {
+  position: absolute;
+  top: -26px;
+  left: 0;
+  background: #0f172a;
+  border: 1.5px solid #10b981;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  color: #34d399;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+}
+
+.pm-guide-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #0f172a;
+  border: 1px solid #34d399;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  color: #34d399;
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 22;
+  will-change: transform;
+}
+
+/* Clean, Flat, Visible HUD Toolbar (38px Height) */
+.pm-hud {
+  position: fixed;
+  bottom: 22px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  background: #111218;
+  border: 1px solid #2e323b;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  padding: 0 10px;
+  z-index: 50;
+  pointer-events: auto;
+  user-select: none;
+  cursor: default;
+}
+
+.pm-hud-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  color: #71717a;
+  padding: 2px;
+}
+
+.pm-hud-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Mode Buttons in HUD */
+.pm-hud-modes {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.pm-hud-btn {
+  background: transparent;
+  border: none;
+  color: #a1a1aa;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.pm-hud-btn:hover {
+  color: #ffffff;
+  background: #20232a;
+}
+
+.pm-hud-btn.active {
+  color: #ffffff;
+  background: #272a34;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.pm-hud-divider {
+  width: 1px;
+  height: 18px;
+  background: #2e323b;
+}
+
+/* Coordinate readout in HUD */
+.pm-hud-readout {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 600;
+  color: #cbd5e1;
+  padding: 0 2px;
+}
+
+.pm-hud-readout .val {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Action buttons in HUD */
+.pm-hud-actions {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.pm-action-btn {
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+
+.pm-action-btn:hover {
+  color: #ffffff;
+  background: #20232a;
+}
+
+.pm-action-btn.btn-close {
+  font-size: 14px;
+  font-weight: 700;
+  padding: 4px 7px;
+}
+
+.pm-action-btn.btn-close:hover {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* Minimal Toast Notification */
+.pm-toast {
+  position: fixed;
+  bottom: 72px;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: #111218;
+  border: 1px solid #3b404d;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 6px;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.pm-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+

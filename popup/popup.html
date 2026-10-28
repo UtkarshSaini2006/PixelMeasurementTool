@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PixelMeasure</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-body">
+    <!-- Header: Clean title + Minimal Switch -->
+    <header class="header">
+      <span class="title">PixelMeasure</span>
+      <label class="switch" title="Toggle ruler (Alt+M)">
+        <input type="checkbox" id="master-switch">
+        <span class="slider"></span>
+      </label>
+    </header>
+
+    <!-- Segmented Mode Control (Linear/macOS style) -->
+    <div class="segmented-control">
+      <button class="seg-btn active" data-mode="box" id="mode-box">Box</button>
+      <button class="seg-btn" data-mode="line" id="mode-line">Line</button>
+      <button class="seg-btn" data-mode="element" id="mode-element">Element</button>
+      <button class="seg-btn" data-mode="crosshair" id="mode-crosshair">Point</button>
+    </div>
+
+    <!-- Status & Info Card -->
+    <div class="info-card">
+      <div class="info-row">
+        <span class="info-label">Status</span>
+        <span class="info-val status-val" id="status-text">Inactive</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Shortcut</span>
+        <span class="info-val"><kbd>Alt</kbd> + <kbd>M</kbd></span>
+      </div>
+    </div>
+
+    <!-- Minimal Keymap Hints -->
+    <div class="shortcuts-panel">
+      <div class="shortcut-line"><span>Nudge selection</span><span class="key-hint">Arrows (⇧ 10px)</span></div>
+      <div class="shortcut-line"><span>Copy CSS specs</span><span class="key-hint">C</span></div>
+      <div class="shortcut-line"><span>Clear / Close</span><span class="key-hint">Esc</span></div>
+    </div>
+
+    <!-- Calibration Bench Footer Link -->
+    <footer class="footer">
+      <button class="link-btn" id="btn-open-demo">Open Calibration Bench →</button>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

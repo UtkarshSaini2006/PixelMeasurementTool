@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^git -C \\.\\\\PixelMeasurementTool status --short --branch; git -C \\.\\\\PixelMeasurementTool remote -v; git -C \\.\\\\PixelMeasurementTool log -1 --oneline$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
